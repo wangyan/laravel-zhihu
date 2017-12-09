@@ -21,9 +21,9 @@
                                 @endif
                             </div>
                             <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
-                                <script id="container" name="body" type="text/plain">
-                                    {!! old('title') !!}
-                                </script><br>
+                                <script id="container" style="height: 200px" name="body" type="text/plain">
+                                    {!! old('body') !!}
+                                </script><br/>
                                 @if ($errors->has('body'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('body') }}</strong>
@@ -34,7 +34,17 @@
                         </form>
                     </div>
                     <script type="text/javascript">
-                        var ue = UE.getEditor('container');
+                        var ue = UE.getEditor('container', {
+                            toolbars: [
+                                ['bold', 'italic', 'underline', 'strikethrough', 'blockquote', 'insertunorderedlist', 'insertorderedlist', 'justifyleft','justifycenter', 'justifyright',  'link', 'insertimage', 'fullscreen']
+                            ],
+                            elementPathEnabled: false,
+                            enableContextMenu: false,
+                            autoClearEmptyNode:true,
+                            wordCount:false,
+                            imagePopup:false,
+                            autotypeset:{ indent: true,imageBlockLine: 'center' }
+                        });
                         ue.ready(function() {
                             ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');
                         });
