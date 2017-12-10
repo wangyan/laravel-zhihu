@@ -11,7 +11,7 @@ class Topic extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','questions_count','followers_count'];
+    protected $fillable = ['name','questions_count','followers_count','bio'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

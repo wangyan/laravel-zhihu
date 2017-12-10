@@ -20,6 +20,10 @@
                                     </span>
                                 @endif
                             </div>
+                            <div class="form-group">
+                                <label for="topic">话题</label>
+                                <select class="select2-placeholder-multiple form-control" multiple="multiple"></select>
+                            </div>
                             <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
                                 <script id="container" style="height: 200px" name="body" type="text/plain">
                                     {!! old('body') !!}
@@ -53,4 +57,46 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+<script type="text/javascript">
+    $(document).ready(function() {
+        function formatTopic (topic) {
+            return  "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__meta'>" +
+            "<div class='select2-result-repository__title'>" +
+            topic.name ? topic.name : "Laravel"   +
+                "</div></div></div>";
+        }
+        function formatTopicSelection (topic) {
+            return topic.name || topic.text;
+        }
+        $(".select2-placeholder-multiple").select2({
+            language: "zh-CN",
+            tags: true,
+            placeholder: '选择相关话题',
+            minimumInputLength: 1,
+            ajax: {
+                url: '/api/topics',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term,
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data,
+                    };
+                },
+                cache: true
+            },
+            templateResult: formatTopic,
+            templateSelection: formatTopicSelection,
+            escapeMarkup: function (markup) { return markup; }
+        });
+    });
+</script>
 @endsection
