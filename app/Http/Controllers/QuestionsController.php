@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\QuestionsRepository;
 use Illuminate\Http\Request;
 use App\Models\Question;
 use App\Models\Topic;
@@ -10,11 +11,14 @@ use App\Http\Requests\StoreQuestionRequest;
 
 class QuestionsController extends Controller
 {
+    protected $questionRepository;
+
     /**
      * QuestionsController constructor.
      */
-    public function __construct()
+    public function __construct(QuestionsRepository $questionRepository)
     {
+        $this->questionRepository = $questionRepository;
         $this->middleware('auth')->except(['index','show']);
     }
 
@@ -84,7 +88,7 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-        $question = Question::where('id',$id)->with('topics')->first();
+        $question = $this->questionRepository->byIdWithTopics($id);
         return view('questions.show',compact('question'));
     }
 
