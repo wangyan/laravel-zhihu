@@ -19,6 +19,11 @@
                             <span class="edit">
                                 <a href="/questions/{{$question->id}}/edit">编辑</a>
                             </span>
+                            <form action="/questions/{{$question->id}}" method="post" class="delete-form">
+                                {{method_field('DELETE')}}
+                                {{csrf_field()}}
+                                <button class="button delete-button is-naked">删除</button>
+                            </form>
                         @endif
                     </div>
                 </div>
