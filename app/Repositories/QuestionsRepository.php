@@ -11,6 +11,16 @@ class QuestionsRepository
 {
     /**
      * @param $id
+     * @return mixed
+     */
+    public function byID($id)
+    {
+        $question = Question::findOrfail($id);
+        return $question;
+    }
+
+    /**
+     * @param $id
      * @return \Illuminate\Database\Eloquent\Model|null|static
      */
     public function byIdWithTopics($id)

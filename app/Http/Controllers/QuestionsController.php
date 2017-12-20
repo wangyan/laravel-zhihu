@@ -100,7 +100,11 @@ class QuestionsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $question = $this->questionRepository->byID($id);
+        if (Auth::user()->owns($question)){
+            return view('questions.edit',compact('question'));
+        }
+        return back();
     }
 
     /**
@@ -110,9 +114,20 @@ class QuestionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreQuestionRequest $request, $id)
     {
-        //
+
+        $question = $this->questionRepository->byID($id);
+        $question->update([
+            'title' => $request->get('title'),
+            'body' => $request->get('body'),
+        ]);
+        $topics = $request->get('topic');
+        if(is_array($topics)){
+            $topicsArray = $this->normalizeTopic($topics);
+        }
+        $question->topics()->sync($topicsArray);
+        return redirect()->route('questions.show',$question->id);
     }
 
     /**
