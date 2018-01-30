@@ -30,6 +30,16 @@ class QuestionsRepository
     }
 
     /**
+     * @param $id
+     * @return mixed
+     */
+    public function byIdWithTopicsAndAnswers($id)
+    {
+        $question = Question::where('id',$id)->with('topics','answers')->first();
+        return $question;
+    }
+
+    /**
      * @param array $attributes
      * @return $this|\Illuminate\Database\Eloquent\Model
      */

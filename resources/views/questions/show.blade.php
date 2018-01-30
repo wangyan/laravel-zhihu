@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    @include('vendor.ueditor.assets')
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -28,6 +29,68 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {!! $question->answers_count !!} 个答案
+                    </div>
+                    <div class="panel-body">
+                        @foreach($question->answers as $answer)
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="">
+                                        <img width="48" src="{{ url('images',$answer->user->avatar) }}" alt="{{$answer->user->name}}" >
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">
+                                        <a href="/user/{{$answer->user->name}}">
+                                            {{$answer->user->name}}
+                                        </a>
+                                    </h4>
+                                    {!! $answer->body !!}
+                                </div>
+                            </div>
+                        @endforeach
+                        <form action="/questions/{{$question->id}}/answer" method="post">
+                            {!! csrf_field() !!}
+                            <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
+                                <label for="body">内容</label>
+                                <script id="container" style="height: 120px" name="body" type="text/plain">
+                                    {!! old('body') !!}
+                                </script><br/>
+                                @if ($errors->has('body'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('body') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                            <button type="submit" class="btn btn-block btn-success pull-right">提交答案</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+@endsection
+
+@section('js')
+<script type="text/javascript">
+    var ue = UE.getEditor('container', {
+        toolbars: [
+            ['bold', 'italic', 'underline', 'strikethrough', 'blockquote', 'insertunorderedlist', 'insertorderedlist', 'justifyleft','justifycenter', 'justifyright',  'link', 'insertimage', 'fullscreen']
+        ],
+        elementPathEnabled: false,
+        enableContextMenu: false,
+        autoClearEmptyNode:true,
+        wordCount:false,
+        imagePopup:false,
+        autotypeset:{ indent: true,imageBlockLine: 'center' }
+    });
+    ue.ready(function() {
+        ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');
+    });
+</script>
 @endsection

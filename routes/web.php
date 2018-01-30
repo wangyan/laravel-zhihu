@@ -22,3 +22,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/email/verify/{token}', 'EmailController@verify')->name('email.verify');
 
 Route::resource('questions','QuestionsController');
+
+Route::post('questions/{question}/answer','AnswerController@store');

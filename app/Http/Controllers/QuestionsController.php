@@ -13,8 +13,10 @@ class QuestionsController extends Controller
 {
     protected $questionRepository;
 
+
     /**
      * QuestionsController constructor.
+     * @param QuestionsRepository $questionRepository
      */
     public function __construct(QuestionsRepository $questionRepository)
     {
@@ -43,10 +45,10 @@ class QuestionsController extends Controller
         return view('questions.create');
     }
 
+
     /**
-     * Store a newly created resource in storage.
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreQuestionRequest $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function store(StoreQuestionRequest $request)
     {
@@ -88,7 +90,7 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-        $question = $this->questionRepository->byIdWithTopics($id);
+        $question = $this->questionRepository->byIdWithTopicsAndAnswers($id);
         return view('questions.show',compact('question'));
     }
 
