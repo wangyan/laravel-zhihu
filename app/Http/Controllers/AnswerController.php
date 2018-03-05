@@ -22,10 +22,11 @@ class AnswerController extends Controller
     public function __construct(AnswerRepository $answer)
     {
         $this->answer = $answer;
+        $this->middleware('auth');
     }
 
     /**
-     * @param Request $request
+     * @param StoreAnswerRequest $request
      * @param $question
      * @return \Illuminate\Http\RedirectResponse
      */

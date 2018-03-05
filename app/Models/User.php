@@ -7,6 +7,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class User
+ * @package App\Models
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -61,5 +65,17 @@ class User extends Authenticatable
     public function answers()
     {
         return $this->hasMany(Answer::class);
+    }
+
+    /**
+     * @param $question
+     * @return mixed
+     */
+    public function follows($question)
+    {
+        return Follow::create([
+            'question_id' => $question,
+            'user_id' => $this->id
+        ]);
     }
 }

@@ -4,7 +4,7 @@
     @include('vendor.ueditor.assets')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-8 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         {{$question->title}}
@@ -29,8 +29,21 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading question-follow">
+                        <h2>{{ $question->followers_count }}</h2>
+                        <span>关注者</span>
+                    </div>
+                    <div class="panel-body">
+                        <a href="/question/{{$question->id}}/follow" class="btn btn-default">
+                            关注该问题
+                        </a>
+                        <a href="#editor" class="btn btn-primary pull-right">撰写答案</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         {!! $question->answers_count !!} 个答案
@@ -53,7 +66,8 @@
                                 </div>
                             </div>
                         @endforeach
-                        <form action="/questions/{{$question->id}}/answer" method="post">
+                        @if(Auth::check())
+                            <form action="/questions/{{$question->id}}/answer" method="post">
                             {!! csrf_field() !!}
                             <div class="form-group{{ $errors->has('body') ? ' has-error' : '' }}">
                                 <label for="body">内容</label>
@@ -68,10 +82,12 @@
                             </div>
                             <button type="submit" class="btn btn-block btn-success pull-right">提交答案</button>
                         </form>
+                        @else
+                            <a href="{{ url('login') }}" class="btn btn-warning btn-block">登录提交答案</a>
+                        @endif
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection
