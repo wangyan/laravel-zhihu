@@ -69,13 +69,32 @@ class User extends Authenticatable
 
     /**
      * @param $question
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function follows($question)
+    public function follows()
     {
-        return Follow::create([
-            'question_id' => $question,
-            'user_id' => $this->id
-        ]);
+        return $this->belongsToMany(Question::class,'user_question')->withTimestamps();
+    }
+
+    /**
+     * @param $question
+     * @return array
+     */
+    public function followThis($question)
+    {
+        $this->follows()->toggle($question);
+        if ($this->followed($question))
+            Question::find($question)->increment('followers_count');
+        else
+            Question::find($question)->decrement('followers_count');
+    }
+
+    /**
+     * @param $question
+     * @return int
+     */
+    public function followed($question)
+    {
+        return  $this->follows()->where('question_id',$question)->count();
     }
 }
