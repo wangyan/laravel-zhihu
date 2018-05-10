@@ -93,4 +93,14 @@ class User extends Authenticatable
     {
         return  $this->follows()->where('question_id',$question)->count();
     }
+
+    /**
+     * 用户正在关注的人
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function following()
+    {
+        return $this->belongsToMany(self::class, 'followers', 'follower_id', 'followed_id')->withTimestamps();
+    }
 }
