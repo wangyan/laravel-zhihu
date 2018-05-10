@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <user-follow-button user="{{$question->user_id}}"></user-follow-button>
-                        <send-message user="{{$question->user_id}}"></send-message>
+                        {{--<send-message user="{{$question->user_id}}"></send-message>--}}
                     </div>
                 </div>
             </div>

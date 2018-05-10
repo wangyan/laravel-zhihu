@@ -62,6 +62,7 @@ class QuestionsController extends Controller
             'user_id' => Auth::id()
         ];
         $question = Question::create($data);
+        Auth::user()->increment('questions_count');
         $question->topics()->attach($topicsArray);
         return view('questions.show',compact('question'));
     }
@@ -143,6 +144,7 @@ class QuestionsController extends Controller
         $question = $this->questionRepository->byID($id);
         if (Auth::user()->owns($question)){
             $question->delete();
+            Auth::user()->decrement('questions_count');
             return redirect('/questions/');
         }
         abort(403,'Forbidden');
