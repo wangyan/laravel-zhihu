@@ -8,6 +8,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- API TOKEN -->
+    <meta name="api-token" content="{{  Auth::check() ? 'Bearer '.Auth::user()->api_token : 'Bearer ' }}">
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->

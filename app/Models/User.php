@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar', 'confirmation_token',
+        'name', 'email', 'password', 'avatar', 'confirmation_token','api_token',
     ];
 
     /**
@@ -82,11 +82,7 @@ class User extends Authenticatable
      */
     public function followThis($question)
     {
-        $this->follows()->toggle($question);
-        if ($this->followed($question))
-            Question::find($question)->increment('followers_count');
-        else
-            Question::find($question)->decrement('followers_count');
+        return $this->follows()->toggle($question);
     }
 
     /**
