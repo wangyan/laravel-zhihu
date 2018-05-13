@@ -7,6 +7,8 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Auth;
+use App\Channels\SendcloudChannel;
+use Mail;
 
 class NewUserFollowNotification extends Notification
 {
@@ -30,7 +32,7 @@ class NewUserFollowNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database',SendcloudChannel::class];
     }
 
     /**
@@ -43,6 +45,24 @@ class NewUserFollowNotification extends Notification
             'name' => Auth::guard('api')->user()->name,
         ];
     }
+
+    /**
+     * @param $notifiable
+     */
+    public function toSendcloud($notifiable)
+    {
+        $data = [
+            'yourName' => $notifiable->name,
+            'followerName' => Auth::guard('api')->user()->name,
+            'url'  => 'http://zhihu.dev/user/'.Auth::guard('api')->user()->id,
+        ];
+        Mail::send('emails.follow', $data, function ($message) use ($data,$notifiable) {
+            $message->from('service@sc.mail.wangyan.org', env('APP_NAME','Laravel'));
+            $message->to($notifiable->email);
+            $message->subject($data['followerName'].'关注了你');
+        });
+    }
+
     /**
      * Get the mail representation of the notification.
      *
