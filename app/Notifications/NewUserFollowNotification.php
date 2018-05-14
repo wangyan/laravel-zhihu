@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Mailer\UserMailer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -51,16 +52,7 @@ class NewUserFollowNotification extends Notification
      */
     public function toSendcloud($notifiable)
     {
-        $data = [
-            'yourName' => $notifiable->name,
-            'followerName' => Auth::guard('api')->user()->name,
-            'url'  => 'http://zhihu.dev/user/'.Auth::guard('api')->user()->id,
-        ];
-        Mail::send('emails.follow', $data, function ($message) use ($data,$notifiable) {
-            $message->from('service@sc.mail.wangyan.org', env('APP_NAME','Laravel'));
-            $message->to($notifiable->email);
-            $message->subject($data['followerName'].'关注了你');
-        });
+        (new UserMailer())->followNotifyEmail($notifiable->email,$notifiable->name);
     }
 
     /**

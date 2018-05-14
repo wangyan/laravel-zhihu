@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mailer\UserMailer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -38,16 +39,7 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $data = [
-            'title' => env('APP_NAME','Laravel'),
-            'name'  => $this->name,
-            'url'   => url('password/reset',$token)
-        ];
-        Mail::send('emails.reset', $data, function ($message) {
-            $message->from('service@sc.mail.wangyan.org', env('APP_NAME','Laravel'));
-            $message->to($this->email);
-            $message->subject('重设密码');
-        });
+        (new UserMailer())->passwordReset($this->name,$this->email,$token);
     }
 
     /**

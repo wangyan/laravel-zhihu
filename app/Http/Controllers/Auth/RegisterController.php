@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mailer\UserMailer;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -81,15 +82,6 @@ class RegisterController extends Controller
      */
     private function sendVerifyEmailTo($user)
     {
-        $data = [
-            'name' => $user->name,
-            'url'  => Route('email.verify',['token' => $user->confirmation_token])
-        ];
-
-        Mail::send('emails.register', $data, function ($message) use ($user) {
-            $message->from('service@sc.mail.wangyan.org', env('APP_NAME','Laravel'));
-            $message->to($user->email);
-            $message->subject('请验证您的 Email 地址');
-        });
+        (new UserMailer())->verifyEmail($user->name,$user->email,$user->confirmation_token);
     }
 }
