@@ -116,4 +116,34 @@ class User extends Authenticatable
     {
         return $this->following()->toggle($user);
     }
+
+    /**
+     * 对答案进行点赞
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function votes()
+    {
+        return $this->belongsToMany(Answer::class,'votes');
+    }
+
+    /**
+     * @param $answer
+     * @return array
+     */
+    public function voteFor($answer)
+    {
+        return $this->votes()->toggle($answer);
+    }
+
+    /**
+     * 根据回答id查询是否有点赞记录
+     *
+     * @param $answer
+     * @return bool
+     */
+    public function hasVoteFor($answer)
+    {
+        return !! $this->votes()->where('answer_id',$answer)->count();
+    }
 }

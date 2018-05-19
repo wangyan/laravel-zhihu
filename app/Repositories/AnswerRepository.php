@@ -17,4 +17,13 @@ class AnswerRepository
     {
         return Answer::create($attributes);
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function byId($id)
+    {
+        return Answer::find($id);
+    }
 }
