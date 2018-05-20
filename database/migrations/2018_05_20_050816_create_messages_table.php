@@ -19,7 +19,7 @@ class CreateMessagesTable extends Migration
             $table->unsignedInteger('to_user_id');
             $table->text('body');
             $table->string('has_read',8)->default('F');
-            $table->timestamps('read_at')->nullable();
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
