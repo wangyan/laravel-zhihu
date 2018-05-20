@@ -22,6 +22,14 @@ class Question extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function comments()
+    {
+        return $this->morphMany('App\Models\comment','commentable');
+    }
+
+    /**
      * @param $query
      * @return mixed
      */
