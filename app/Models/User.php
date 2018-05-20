@@ -146,4 +146,14 @@ class User extends Authenticatable
     {
         return !! $this->votes()->where('answer_id',$answer)->count();
     }
+
+    /**
+     * 用户可以向多个用户发送私信
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class,'to_user_id');
+    }
 }
