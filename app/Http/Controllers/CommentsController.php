@@ -2,22 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\models\Answer;
-use App\Models\Comment;
-use App\Models\Question;
-use Illuminate\Http\Request;
+use App\Repositories\AnswerRepository;
+use App\Repositories\CommentRepository;
+use App\Repositories\QuestionsRepository;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class CommentsController
+ * @package App\Http\Controllers
+ */
 class CommentsController extends Controller
 {
+    /**
+     * @var AnswerRepository
+     */
+    protected $answer;
+
+    /**
+     * @var QuestionsRepository
+     */
+    protected $question;
+
+    /**
+     * @var CommentRepository
+     */
+    protected $comment;
+
+    /**
+     * CommentsController constructor.
+     * @param AnswerRepository $answer
+     * @param QuestionsRepository $question
+     * @param CommentRepository $comment
+     */
+    public function __construct(AnswerRepository $answer, QuestionsRepository $question, CommentRepository $comment)
+    {
+        $this->answer = $answer;
+        $this->question = $question;
+        $this->comment = $comment;
+    }
+
     /**
      * @param $id
      * @return mixed
      */
     public function answer($id)
     {
-        $answer = Answer::with('comments','comments.user')->where('id', $id)->first();
-        return $answer->comments;
+        return $this->answer->getAnswerCommentsById($id);
     }
 
     /**
@@ -26,26 +56,22 @@ class CommentsController extends Controller
      */
     public function question($id)
     {
-        $question = Question::with('comments','comments.user')->where('id', $id)->first();
-        return $question->comments;
-
+        return $this->question->getQuestionCommentsById($id);
     }
 
     /**
-     * @return mixed
+     * @return CommentRepository
      */
     public function store()
     {
         $model = $this->getModelNameFromType(request('type'));
 
-        $comment = Comment::create([
+        return $this->comment->create([
             'commentable_id' => request('model'),
             'commentable_type' => $model,
             'user_id' => Auth::guard('api')->user()->id,
             'body' => request('body')
         ]);
-
-        return $comment;
     }
 
     /**
