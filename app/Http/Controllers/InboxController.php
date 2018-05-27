@@ -24,18 +24,19 @@ class InboxController extends Controller
      */
     public function index()
     {
-        $messages = Auth::user()->messages->groupBy('from_user_id');
-        return $messages;
-        return view('inbox.index',compact('messages'));
+        $messages = Message::where('to_user_id',Auth::id())
+            ->orWhere('from_user_id',Auth::id())
+            ->with(['fromUser','toUser'])->get();
+        return view('inbox.index',['messages' => $messages->groupBy('to_user_id')]);
     }
 
     /**
-     * @param $userId
+     * @param $dialogId
      * @return mixed
      */
-    public function show($userId)
+    public function show($dialogId)
     {
-        $messages = Message::where('from_user_id',$userId)->get();
+        $messages = Message::where('dialog_id',$dialogId)->get();
         return $messages;
     }
 }

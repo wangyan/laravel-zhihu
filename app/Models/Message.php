@@ -4,11 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Message
+ * @package App\Models
+ */
 class Message extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'messages';
 
-    protected $fillable = ['from_user_id', 'to_user_id', 'body'];
+    /**
+     * @var array
+     */
+    protected $fillable = ['from_user_id', 'to_user_id', 'body', 'dialog_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -19,10 +29,10 @@ class Message extends Model
     }
 
     /**
-     * @return bool
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function toUser()
     {
-        return !! $this->belongsTo(User::class,'to_user_id');
+        return $this->belongsTo(User::class,'to_user_id');
     }
 }
