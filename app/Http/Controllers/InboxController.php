@@ -26,8 +26,8 @@ class InboxController extends Controller
     {
         $messages = Message::where('to_user_id',Auth::id())
             ->orWhere('from_user_id',Auth::id())
-            ->with(['fromUser','toUser'])->get();
-        return view('inbox.index',['messages' => $messages->unique('dialog_id')->groupBy('to_user_id')]);
+            ->with(['fromUser','toUser'])->latest()->get();
+        return view('inbox.index',['messages' => $messages->groupBy('dialog_id')]);
     }
 
     /**

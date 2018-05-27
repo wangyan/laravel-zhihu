@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Message
@@ -56,4 +57,30 @@ class Message extends Model
         return new MessageCollection($models);
     }
 
+    /**
+     * @return bool
+     */
+    public function read()
+    {
+        return $this->has_read === 'T';
+    }
+
+    /**
+     * @return bool
+     */
+    public function unread()
+    {
+        return $this->has_read === 'F';
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldAddUnreadClass()
+    {
+        if(Auth::id() === $this->from_user_id) {
+            return false;
+        }
+        return $this->unread();
+    }
 }
