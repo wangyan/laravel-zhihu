@@ -36,3 +36,6 @@ Route::post('inbox/{dialogId}/store','InboxController@store');
 
 Route::get('avatar','UsersController@avatar');
 Route::post('avatar','UsersController@changeAvatar');
+
+Route::get('password','PasswordController@password');
+Route::post('password/update','PasswordController@update');
