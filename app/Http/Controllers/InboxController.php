@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\NewMessageNotification;
 use App\Repositories\MessageRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,12 +53,13 @@ class InboxController extends Controller
     {
         $message = $this->message->getStingleMessageBy($dialogId);
         $toUserId = $message->from_user_id === Auth::id() ? $message->to_user_id : $message->from_user_id;
-        $this->message->create([
+        $newMessage = $this->message->create([
             'from_user_id' => Auth::id(),
             'to_user_id' => $toUserId,
             'body' => request('body'),
             'dialog_id' => $dialogId
         ]);
+        $newMessage->toUser->notify(new NewMessageNotification($newMessage));
         return back();
     }
 }
