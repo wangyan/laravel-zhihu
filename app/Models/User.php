@@ -42,6 +42,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * @return Setting
+     */
+    public function settings()
+    {
+        return new Setting($this);
+    }
+
+    /**
      * @param string $token
      */
     public function sendPasswordResetNotification($token)
