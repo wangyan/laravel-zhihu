@@ -108,7 +108,7 @@
                         <div class="media">
                             <div class="media-left">
                                 <a href="#">
-                                    <img width="36" src="{{ url('images',$question->user->avatar) }}" alt="{{$question->user->name}}">
+                                    <img width="36" src="{{ $question->user->avatar }}" alt="{{$question->user->name}}">
                                 </a>
                             </div>
                             <div class="media-body">

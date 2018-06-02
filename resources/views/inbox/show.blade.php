@@ -21,7 +21,7 @@
                                 <div class="media">
                                     <div class="media-left">
                                         <a href="#">
-                                            <img src="{{ url('images',$message->fromUser->avatar) }}"  width="48" alt="">
+                                            <img src="{{ $message->fromUser->avatar }}"  width="48" alt="">
                                         </a>
                                     </div>
                                     <div class="media-body">

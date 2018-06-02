@@ -7,7 +7,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">更换头像</div>
                     <div class="panel-body">
-                        <user-avatar avatar="{{ url('images',Auth::user()->avatar) }}" ></user-avatar>
+                        <user-avatar avatar="{{Auth::user()->avatar}}"></user-avatar>
                     </div>
                 </div>
             </div>

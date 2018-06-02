@@ -12,9 +12,9 @@
                                 <div class="media-left">
                                     <a href="#">
                                         @if(Auth::id() == $messageGroup->last()->from_user_id)
-                                            <img src="{{ url('images', $messageGroup->last()->toUser->avatar) }}" width="48" alt="">
+                                            <img src="{{ $messageGroup->last()->toUser->avatar }}" width="48" alt="">
                                         @else
-                                            <img src="{{ url('images', $messageGroup->last()->fromUser->avatar) }}" width="48" alt="">
+                                            <img src="{{ $messageGroup->last()->fromUser->avatar }}" width="48" alt="">
                                         @endif
                                     </a>
                                 </div>

@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-/**
- * Class UsersController
- * @package App\Http\Controllers
- */
 class UsersController extends Controller
 {
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function avatar()
     {
         return view('users.avatar');
+    }
+
+    public function changeAvatar(Request $request)
+    {
+        $file = $request->file('img');
+        $filename = md5(time().user()->id).'.'.$file->getClientOriginalExtension();
+        $file->move(public_path('avatars'),$filename);
+        user()->avatar = asset('avatars/'.$filename);
+        user()->save();
+        return ['url' => user()->avatar];
     }
 }

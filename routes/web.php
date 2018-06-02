@@ -35,3 +35,4 @@ Route::get('inbox/{dialogId}','InboxController@show');
 Route::post('inbox/{dialogId}/store','InboxController@store');
 
 Route::get('avatar','UsersController@avatar');
+Route::post('avatar','UsersController@changeAvatar');
